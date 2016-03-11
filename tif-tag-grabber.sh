@@ -6,11 +6,18 @@
 
 # Find all tif files in current and subdirectories
 
-FILES="$(find . -type f -name '*.tif*' -print0)"
+FILES="$(find . -type f -name '*.tif*')"
+
+# Run tiffdump on the first file to find expected headers.
+for f in $FILES;
+do
+    tiffdump $f | grep -o "^[a-zA-Z0-9]*\s" | paste -sd "," - | sed "s#^#file,#" > tags.csv;
+    break
+done
 
 # Run tiffdump on each file, grep the value of each tag, comma separate values
 # and prefix file name. Write results to tags.csv.
 for f in $FILES;
 do
   tiffdump $f | grep -o '<.*>' | paste -sd "," - | sed "s#^#$f,#";
-done > tags.csv
+done >> tags.csv
