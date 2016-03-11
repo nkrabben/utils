@@ -6,7 +6,7 @@
 
 # Find all tif files in current and subdirectories
 
-FILES="$(find . -type f -name '*.tif*')"
+FILES="$(find . -type f -name '*.tif*' -print0)"
 
 # Run tiffdump on each file, grep the value of each tag, comma separate values
 # and prefix file name. Write results to tags.csv.
